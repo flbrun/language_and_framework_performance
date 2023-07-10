@@ -8,6 +8,9 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +43,6 @@ public class MainVerticle extends AbstractVerticle {
     router.get("/vertx/fibonacci/:length").handler(this::fibonacci);
 
 
-
     vertx.createHttpServer()
       .requestHandler(router)
       .listen(8888)
@@ -54,6 +56,8 @@ public class MainVerticle extends AbstractVerticle {
 
   private void helloWorld(RoutingContext context)
   {
+    context.response().putHeader("Content-Type", "text/plain;charset=UTF-8");
+    context.response().putHeader("Date", formatDateHeader());
     context.response().end("Hello World !");
   }
 
@@ -62,6 +66,9 @@ public class MainVerticle extends AbstractVerticle {
   {
     String name = context.request().getParam("name");
 
+    context.response().putHeader("Content-Type", "text/plain;charset=UTF-8");
+    context.response().putHeader("Date", formatDateHeader());
+
     context.response().end("Hello " + name + " !");
   }
 
@@ -69,6 +76,9 @@ public class MainVerticle extends AbstractVerticle {
   private void fibonacci(RoutingContext context)
   {
     int length = Integer.parseInt(context.request().getParam("length"));
+
+    context.response().putHeader("Content-Type", "text/plain;charset=UTF-8");
+    context.response().putHeader("Date", formatDateHeader());
 
     if(length>1) {
       long[] fibonacci = new long[length];
@@ -82,5 +92,12 @@ public class MainVerticle extends AbstractVerticle {
     }
     else context.response().end("Fibonacci calculation not possible !");
   }
+
+  private String formatDateHeader() {
+    ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
+    return DateTimeFormatter.RFC_1123_DATE_TIME.format(now);
+  }
 }
+
+
 
