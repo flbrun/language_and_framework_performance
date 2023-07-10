@@ -3,3 +3,5 @@
 /spring-boot/.idea/
 /vertx/.idea/
 /.idea/
+/response-checker/package-lock.json
+/response-checker/node_modules/
