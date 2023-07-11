@@ -6,7 +6,7 @@
   color: white;
 }
 
-.Element-block {
+.Configuration-block {
   margin-top: 15px;
   margin-left: 10px;
   flex-wrap: wrap;
@@ -14,7 +14,7 @@
   justify-content: normal;
 }
 
-.Server-selection-border {
+.Configuration-framing {
   border: 1px solid #d3d3d3;
   padding: 20px;
   position: relative;
@@ -23,9 +23,10 @@
   margin-top: 20px;
   margin-left: 20px;
   min-width: 485px;
+  display: flex;
 }
 
-.Server-selection-heading {
+.Configuration-headline {
   position: absolute;
   top: -23px;
   left: 20px;
@@ -35,7 +36,7 @@
   font-weight: bold;
 }
 
-.Colon
+.punctuation
 {
   display:inline-block;
   position: relative;
@@ -45,4 +46,14 @@
   vertical-align: middle;
 
 }
+.configuration-button-group {
 
+  height: 45px;
+  position: relative;
+  right: -45px;
+  top: 80px;
+}
+.configuration-button
+{
+  width: 145px;
+}
