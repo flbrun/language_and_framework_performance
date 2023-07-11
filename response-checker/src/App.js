@@ -17,22 +17,9 @@ function App() {
     const [method, setMethod] = useState('GET');
     const [testKind, setTestKind] = useState('seriell');
     const [configButton, setConfigButton] = useState('')
+    const [requestsNumber, setRequestsNumber] = useState(0);
+    const [parallel, setParallel] = useState(0);
 
-
-    // const handleFormSubmit = (e) => {
-    //     e.preventDefault();
-    //
-    //     const url = selectedProtocol + serverName + ':' + port;
-    //
-    //     fetch(url)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             console.log(data);
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    // };
 
     return (
         <div className="App">
@@ -53,6 +40,10 @@ function App() {
                     setMethod={setMethod}
                     testKind={testKind}
                     setTestKind={setTestKind}
+                    requestNumber={requestsNumber}
+                    setRequestNumber={setRequestsNumber}
+                    parallel={parallel}
+                    setParallel={setParallel}
                     configButtonCallback={configButton}
                     setConfigButton={setConfigButton}
                 />
@@ -64,3 +55,19 @@ function App() {
 }
 
 export default App;
+
+
+// const handleFormSubmit = (e) => {
+//     e.preventDefault();
+//
+//     const url = selectedProtocol + serverName + ':' + port;
+//
+//     fetch(url)
+//         .then((response) => response.json())
+//         .then((data) => {
+//             console.log(data);
+//         })
+//         .catch((error) => {
+//             console.error(error);
+//         });
+// };

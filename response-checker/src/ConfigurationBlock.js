@@ -1,11 +1,13 @@
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import {FormControl, FormControlLabel, Radio, RadioGroup, Stack} from "@mui/material";
+import {FormControl, FormControlLabel, Radio, RadioGroup, Stack, Tooltip} from "@mui/material";
 import ConfigurationButton from "./ConfigurationButton";
 import {pink} from "@mui/material/colors";
 
 const protocol = ['http://', 'https://'];
 const methods = ['GET'];
+
+localStorage.setItem("adad", "asdasd")
 export default function ConfigurationBlock({
                                 selectedProtocol,
                                 setSelectedProtocol,
@@ -19,6 +21,10 @@ export default function ConfigurationBlock({
                                 setMethod,
                                 testKind,
                                 setTestKind,
+                                requestNumber,
+                                setRequestNumber,
+                                parallelRequests,
+                                setParallel,
                                 configButton,
                                 setConfigButton,
                             }) {
@@ -53,6 +59,7 @@ export default function ConfigurationBlock({
                 <p className="punctuation">:</p>
 
                 <TextField
+                    type="number"
                     id="port"
                     label="Port"
                     sx={{ m: 1, width: '10ch' }}
@@ -98,18 +105,18 @@ export default function ConfigurationBlock({
                         aria-labelledby="test-selection"
                         name="test-selection"
                         value={testKind}
-                        onChange={(e) => setTestKind(e.target.value)}
-                    >
+                        onChange={(e) => setTestKind(e.target.value)}>
+
                         <FormControlLabel
                             value="seriell"
                             control={<Radio />}
-                            label="Seriell"
-                        />
+                            label="Seriell"/>
+
                         <FormControlLabel
                             value="parallel"
                             control={<Radio />}
-                            label="Parallel"
-                        />
+                            label="Parallel"/>
+
                         <FormControlLabel
                             value="Benchmark"
                             control={<Radio sx={{
@@ -125,31 +132,46 @@ export default function ConfigurationBlock({
                 </FormControl>
                 {testKind === "parallel" ?
                     (<Stack>
-                        <TextField
-                            size="small"
-                            id="requestCount"
-                            label="Requests"
-                            sx={{ m: 1, width: 100 }}
-                            variant="outlined"
-                            onChange={(e) => setEndpoint(e.target.value)}/>
-                        <TextField
-                            size="small"
-                            id="parallelCount"
-                            label="Requests"
-                            sx={{ m: 1, width: 100 }}
-                            variant="outlined"
-                            onChange={(e) => setEndpoint(e.target.value)}/>
+                        <Tooltip title="Number of Requests you want to proceed" placement="top">
+                            <TextField
+                                type="number"
+                                size="small"
+                                id="requestCount"
+                                label="Requests"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                sx={{ m: 1, width: 130}}
+                                onChange={(e) => setRequestNumber(e.target.value)}/>
+                        </Tooltip>
+                        <Tooltip title="Number of Requests to run in parallel" placement="top">
+                            <TextField
+                                type="number"
+                                size="small"
+                                id="parallel"
+                                label="Parallel Requests"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                sx={{ m: 1, width: 130}}
+                                onChange={(e) => setParallel(e.target.value)}/>
+                        </Tooltip>
                     </Stack>):
+                    testKind === "seriell" ?
                     (
-                        <TextField
-                            size="small"
-                            id="requestCount"
-                            label="Requests"
-                            sx={{ m: 1, width: 100 }}
-                            variant="outlined"
-                            onChange={(e) => setEndpoint(e.target.value)}/>
-                    )
-
+                        <Tooltip title="Number of Requests you want to proceed" placement="top">
+                            <TextField
+                                type="number"
+                                size="small"
+                                id="requestCount"
+                                label="Requests"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                sx={{ m: 1, width: 130 }}
+                                onChange={(e) => setRequestNumber(e.target.value)}/>
+                        </Tooltip>
+                    ):(<div style={{width:146}}></div>)
                 }
 
                 <ConfigurationButton callback={setConfigButton} />

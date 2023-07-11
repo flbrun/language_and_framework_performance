@@ -12,6 +12,7 @@ export default function ExecutionBlock({
            method,
            setMethod,
            testKind,
+           setParallelRequests,
            setIsSerial,
            configButton,
            setConfigButton,
