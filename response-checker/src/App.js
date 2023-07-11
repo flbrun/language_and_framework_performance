@@ -3,6 +3,7 @@ import './App.css';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import {useState} from "react";
+import {Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack} from "@mui/material";
 
 const protocol = [
     'http://',
@@ -10,27 +11,33 @@ const protocol = [
   //  'ws://',
   //  'wss://',
 ];
+const methods = [
+    'GET',
+  //  'POST',
+ //   'DELETE',
+ //   'PUT'
+];
 
 function App() {
     const [selectedProtocol, setSelectedProtocol] = useState('http://');
     const [serverName, setServerName] = useState('');
     const [port, setPort] = useState('');
+    const [endpoint, setEndpoint] = useState('')
+    const [method, setMethod] = useState('GET')
+    const [isSerial, setIsSerial] = useState(true)
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
         const url = selectedProtocol + serverName + ':' + port;
 
-        // Perform your GET request with the constructed URL
-        // Example using fetch:
+
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
-                // Handle the response data as needed
                 console.log(data);
             })
             .catch((error) => {
-                // Handle any error that occurred during the request
                 console.error(error);
             });
     };
@@ -40,7 +47,7 @@ function App() {
         <p>Response Checker</p>
       </header>
       <body>
-          <div className="Server-selection">
+          <div className="Element-block">
               <div className="Server-selection-border">
                   <h2 className="Server-selection-heading">Server Selection</h2>
 
@@ -48,14 +55,10 @@ function App() {
                       id="protocol"
                       sx={{ m: 1, width: '12ch' }}
                       select
-                      label="Select"
                       defaultValue="http://"
-                      onChange={(e) => setSelectedProtocol(e.target.value)}
-                  >
+                      onChange={(e) => setSelectedProtocol(e.target.value)}>
                       {protocol.map((option) => (
-                          <MenuItem key={option} value={option}>
-                              {option}
-                          </MenuItem>
+                          <MenuItem key={option} value={option}>{option}</MenuItem>
                       ))}
                   </TextField>
 
@@ -64,8 +67,7 @@ function App() {
                       sx={{ m: 1 }}
                       label="Server"
                       variant="outlined"
-                      onChange={(e) => setServerName(e.target.value)}
-                  />
+                      onChange={(e) => setServerName(e.target.value)}/>
 
                   <p className="Colon">:</p>
 
@@ -74,10 +76,60 @@ function App() {
                       label="Port"
                       sx={{ m: 1, width: '10ch' }}
                       variant="outlined"
-                      onChange={(e) => setPort(e.target.value)}
-                  />
+                      onChange={(e) => setPort(e.target.value)}/>
+
+              </div>
+              <div className="Server-selection-border">
+                  <h2 className="Server-selection-heading">Endpoint</h2>
+
+                  <p className="Colon">/</p>
+                  <TextField
+                      id="endpoint"
+                      label="Endpoint"
+                      sx={{ m: 1, width: '50ch' }}
+                      variant="outlined"
+                      onChange={(e) => setEndpoint(e.target.value)}/>
+                  <TextField
+                      id="method"
+                      sx={{ m: 1 }}
+                      select
+                      defaultValue="GET"
+                      onChange={(e) => setMethod(e.target.value)}>
+                      {methods.map((option) => (
+                          <MenuItem key={option} value={option}>
+                              {option}
+                          </MenuItem>
+                      ))}
+                  </TextField>
+              </div>
+              <div className="Server-selection-border">
+                  <h2 className="Server-selection-heading">Test Configuration</h2>
+
+                  <FormControl>
+                      <RadioGroup
+                          aria-labelledby="test-selection"
+                          name="test-selection"
+                          value={isSerial}
+                          onChange={(e) => setIsSerial(e.target.value)}>
+
+                          <FormControlLabel value={true} control={<Radio />} label="Seriell" />
+                          <FormControlLabel value={false} control={<Radio />} label="Parallel" />
+                      </RadioGroup>
+                  </FormControl>
+                  <TextField
+                      id="requestCount"
+                      label="Requests"
+                      sx={{ m: 1, width:150}}
+                      variant="outlined"
+                      onChange={(e) => setEndpoint(e.target.value)}/>
+                  <Stack spacing={2} direction="row">
+                      <Button variant="contained">Create Curl</Button>
+                      <Button variant="contained">Run Checker</Button>
+                  </Stack>
+
               </div>
           </div>
+
       </body>
     </div>
   );

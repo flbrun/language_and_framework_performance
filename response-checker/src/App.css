@@ -6,9 +6,12 @@
   color: white;
 }
 
-.Server-selection {
-  margin-top: 28px;
-  margin-left: 20px;
+.Element-block {
+  margin-top: 15px;
+  margin-left: 10px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: normal;
 }
 
 .Server-selection-border {
@@ -17,6 +20,9 @@
   position: relative;
   width: max-content;
   border-radius: 5px;
+  margin-top: 20px;
+  margin-left: 20px;
+  min-width: 485px;
 }
 
 .Server-selection-heading {
@@ -39,3 +45,4 @@
   vertical-align: middle;
 
 }
+
