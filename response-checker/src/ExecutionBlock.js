@@ -20,33 +20,17 @@ export default function ExecutionBlock({
            configButton,
            setConfigButton,
        }) {
-    // const [scripts, setScripts] = useState([]);
-    // const [selectedScript, setSelectedScript] = useState("");
-    //
-    // useEffect(() => {
-    //     // Fetch the list of scripts from the server
-    //     const fetchScripts = async () => {
-    //         try {
-    //             const response = await fetch("./scripts");
-    //             const files = await response.json();
-    //             const scriptFiles = files.filter((file) => file.startsWith("script-"));
-    //             setScripts(scriptFiles);
-    //         } catch (error) {
-    //             console.error("Error fetching scripts:", error);
-    //         }
-    //     };
-    //     fetchScripts();
-    // }, []);
-    // const handleScriptSelection = async (scriptName) => {
-    //     setSelectedScript(scriptName);
-    // }
 
         if (configButton === "Create Curl") {
             switch (testKind) {
+                case 'parallel':{
+                    return <FileLoader/>
+                }
+                default: return <p>Wrong input</p>
 
             }
-            return <p> {configButton}</p>
+
         }
-    return <p>test</p>
+    return <p> {configButton}</p>
 
 }

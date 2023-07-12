@@ -56,18 +56,3 @@ function App() {
 
 export default App;
 
-
-// const handleFormSubmit = (e) => {
-//     e.preventDefault();
-//
-//     const url = selectedProtocol + serverName + ':' + port;
-//
-//     fetch(url)
-//         .then((response) => response.json())
-//         .then((data) => {
-//             console.log(data);
-//         })
-//         .catch((error) => {
-//             console.error(error);
-//         });
-// };
