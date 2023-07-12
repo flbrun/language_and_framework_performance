@@ -47,7 +47,15 @@ function App() {
                     configButtonCallback={configButton}
                     setConfigButton={setConfigButton}
                 />
-                <ExecutionBlock configButton={configButton}/>
+                <ExecutionBlock
+                    requestNumber={requestsNumber}
+                    serverName={serverName}
+                    port={port}
+                    endpoint={endpoint}
+                    parallel={parallel}
+                    configButton={configButton}
+                    testKind={testKind}
+                    method={method}/>
 
             </main>
         </div>

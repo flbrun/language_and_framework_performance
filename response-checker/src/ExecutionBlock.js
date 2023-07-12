@@ -15,8 +15,9 @@ export default function ExecutionBlock({
            method,
            setMethod,
            testKind,
-           setParallelRequests,
+           parallel,
            setIsSerial,
+           requestNumber,
            configButton,
            setConfigButton,
        }) {
@@ -24,13 +25,18 @@ export default function ExecutionBlock({
         if (configButton === "Create Curl") {
             switch (testKind) {
                 case 'parallel':{
-                    return <FileLoader/>
+                    return <FileLoader
+                        method={method}
+                        serverName={serverName}
+                        port={port}
+                        endpoint={endpoint}
+                        requestNumber={requestNumber}/>
                 }
                 default: return <p>Wrong input</p>
 
             }
 
         }
-    return <p> {configButton}</p>
+    return <p> {testKind}</p>
 
 }
