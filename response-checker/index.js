@@ -63,3 +63,7 @@ async function initializeWindow(mainWindow) {
     mainWindow.setMenu(null);
     mainWindow.webContents.openDevTools();
 }
+
+try {
+    require('electron-reloader')(module)
+} catch (_) {}

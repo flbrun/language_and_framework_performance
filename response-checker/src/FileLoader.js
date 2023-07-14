@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import SyntaxHighlighter from "react-syntax-highlighter";
 const { ipcRenderer } = window.require('electron');
 
-export const FileLoader = ({method, endpoint, port, requestNumber, serverName, parallel}) => {
+
+export const FileLoader = ({method, endpoint, port, requestNumber, serverName, parallel, testKind}) => {
     const [scriptContents, setScriptContents] = useState([]);
 
     useEffect(() => {
@@ -19,56 +21,50 @@ export const FileLoader = ({method, endpoint, port, requestNumber, serverName, p
             ipcRenderer.removeAllListeners('script-contents');
         };
     }, []);
+    const specifyScript = (name) => {
+        const selectedScript = scriptContents.find((script) => script.fileName === name);
+        // return selectedScript ? <SyntaxHighlighter children={selectedScript.content} language="bash" style={dracula} />: null;
+         return selectedScript ? formatScriptContent(selectedScript.content): null;
+
+    };
+
+    const renderContent = () => {
+        switch (testKind) {
+            case 'seriell':
+                return specifyScript('script-seriell.sh');
+            case 'parallel':
+                return specifyScript('script-parallel.sh');
+            default:
+                return null;
+        }
+    };
 
     const formatScriptContent = (content) => {
-        const lines = content.split('\n');
-        const formattedLines = lines.map((line, index) => {
-            if (line.includes('method_tmpl'))
-            {
-                return line.replace('method_tmpl', method);
-            }
-            if (line.includes('server_tmpl'))
-            {
-                return line.replace('server_tmpl', serverName);
-            }
-            if (line.includes('port_tmpl'))
-            {
-                return line.replace('port_tmpl', port);
-            }
-            if (line.includes('endpoint_tmpl'))
-            {
-                return line.replace('endpoint_tmpl', endpoint);
-            }
-            if (line.includes('request_tmpl'))
-            {
-                return line.replace('request_tmpl', requestNumber);
-            }
-            if (line.includes('concurrency_tmpl'))
-            {
-                return line.replace('request_tmpl', parallel);
-            }
-            else {
-                return line;
-            }
-        });
+        const placeholders = {
+            'method_tmpl': method,
+            'server_tmpl': serverName,
+            'port_tmpl': port,
+            'endpoint_tmpl': endpoint,
+            'request_tmpl': requestNumber,
+            'concurrency_tmpl': parallel
+        };
 
-        return formattedLines.map((line, index) => (
-            <React.Fragment key={index}>
-                {line}
-                <br />
-            </React.Fragment>
-        ));
+
+        for (const placeholder in placeholders) {
+            if (content.includes(placeholder)) {
+                content = content.replace(placeholder, placeholders[placeholder]);
+            }
+        }
+
+        return <SyntaxHighlighter children={content} language="bash"/>
+
+
     };
 
     return (
-        <div>
-            {scriptContents.map((script) => (
-                <div key={script.fileName}>
-                    {script.fileName}
-                    {formatScriptContent(script.content)}
-                </div>
-            ))}
-        </div>
+            <div className="Code_block">
+                {renderContent()}
+            </div>
     );
 }
 

@@ -22,20 +22,16 @@ export default function ExecutionBlock({
            setConfigButton,
        }) {
 
+
+
         if (configButton === "Create Curl") {
-            switch (testKind) {
-                case 'parallel':{
-                    return <FileLoader
-                        method={method}
-                        serverName={serverName}
-                        port={port}
-                        endpoint={endpoint}
-                        requestNumber={requestNumber}/>
-                }
-                default: return <p>Wrong input</p>
-
-            }
-
+            return <FileLoader
+                testKind={testKind}
+                method={method}
+                serverName={serverName}
+                port={port}
+                endpoint={endpoint}
+                requestNumber={requestNumber}/>
         }
     return <p> {testKind}</p>
 

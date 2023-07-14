@@ -52,8 +52,15 @@
   position: relative;
   right: -20px;
   top: 80px;
+
 }
 .configuration-button
 {
   width: 145px;
+}
+
+.Code_block
+{
+  white-space: pre-line;
+  font-family: monospace;
 }
