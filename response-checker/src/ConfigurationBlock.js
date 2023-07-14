@@ -108,9 +108,9 @@ export default function ConfigurationBlock({
                         onChange={(e) => setTestKind(e.target.value)}>
 
                         <FormControlLabel
-                            value="seriell"
+                            value="serial"
                             control={<Radio />}
-                            label="Seriell"/>
+                            label="Serial"/>
 
                         <FormControlLabel
                             value="parallel"
@@ -157,7 +157,7 @@ export default function ConfigurationBlock({
                                 onChange={(e) => setParallel(e.target.value)}/>
                         </Tooltip>
                     </Stack>):
-                    testKind === "seriell" ?
+                    testKind === "serial" ?
                     (
                         <Tooltip title="Number of Requests you want to proceed" placement="top">
                             <TextField

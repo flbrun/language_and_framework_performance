@@ -1,6 +1,6 @@
 
 
-import FileLoader from "./FileLoader";
+import ScriptLoader from "./ScriptLoader";
 
 
 export default function ExecutionBlock({
@@ -24,7 +24,7 @@ export default function ExecutionBlock({
 
     const renderContent = () => {
         if (configButton === "Create Script") {
-            return<FileLoader
+            return<ScriptLoader
                 testKind={testKind}
                 method={method}
                 serverName={serverName}

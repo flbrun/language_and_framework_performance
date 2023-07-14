@@ -5,7 +5,7 @@ import { coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
 const { ipcRenderer } = window.require('electron');
 
 
-export const FileLoader = ({method, endpoint, port, requestNumber, serverName, parallel, testKind}) => {
+export const ScriptLoader = ({method, endpoint, port, requestNumber, serverName, parallel, testKind}) => {
 
     const [scriptContents, setScriptContents] = useState([]);
     let [headlineText, setHeadlineText] = useState('Test');
@@ -42,13 +42,13 @@ export const FileLoader = ({method, endpoint, port, requestNumber, serverName, p
            case 'script-parallel.sh':
                name = "Linux Script (Parallel)";
                break;
-           case 'script-seriell.sh':
+           case 'script-serial.sh':
                name = "Linux Script (Serial)";
                break;
            case 'windows-script-parallel.bat':
                name = "Windows Script (Parallel)";
                break;
-           case 'windows-script-seriell.bat':
+           case 'windows-script-serial.bat':
                name = "Windows Script (Serial)";
                break;
            default:
@@ -79,10 +79,10 @@ export const FileLoader = ({method, endpoint, port, requestNumber, serverName, p
 
     const renderContent = () => {
         switch (testKind) {
-            case 'seriell': {
+            case 'serial': {
                 return [
-                    specifyScript('script-seriell.sh', "bash"),
-                    specifyScript('windows-script-seriell.bat', "batch")
+                    specifyScript('script-serial.sh', "bash"),
+                    specifyScript('windows-script-serial.bat', "batch")
                 ];
             }
             case 'parallel': {
@@ -103,4 +103,4 @@ export const FileLoader = ({method, endpoint, port, requestNumber, serverName, p
 
 }
 
-export default FileLoader;
+export default ScriptLoader;

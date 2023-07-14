@@ -15,7 +15,7 @@ function App() {
     const [port, setPort] = useState('');
     const [endpoint, setEndpoint] = useState('');
     const [method, setMethod] = useState('GET');
-    const [testKind, setTestKind] = useState('seriell');
+    const [testKind, setTestKind] = useState('serial');
     const [configButton, setConfigButton] = useState('')
     const [requestsNumber, setRequestsNumber] = useState(0);
     const [parallel, setParallel] = useState(0);
