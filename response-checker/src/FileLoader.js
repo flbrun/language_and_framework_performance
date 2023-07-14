@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import SyntaxHighlighter from "react-syntax-highlighter";
+import { coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
 const { ipcRenderer } = window.require('electron');
 
 
 export const FileLoader = ({method, endpoint, port, requestNumber, serverName, parallel, testKind}) => {
+
     const [scriptContents, setScriptContents] = useState([]);
+    let [headlineText, setHeadlineText] = useState('Test');
 
     useEffect(() => {
+
         ipcRenderer.on('script-contents', (event, contents) => {
             setScriptContents(contents);
         });
@@ -21,25 +26,8 @@ export const FileLoader = ({method, endpoint, port, requestNumber, serverName, p
             ipcRenderer.removeAllListeners('script-contents');
         };
     }, []);
-    const specifyScript = (name) => {
-        const selectedScript = scriptContents.find((script) => script.fileName === name);
-        // return selectedScript ? <SyntaxHighlighter children={selectedScript.content} language="bash" style={dracula} />: null;
-         return selectedScript ? formatScriptContent(selectedScript.content): null;
 
-    };
-
-    const renderContent = () => {
-        switch (testKind) {
-            case 'seriell':
-                return specifyScript('script-seriell.sh');
-            case 'parallel':
-                return specifyScript('script-parallel.sh');
-            default:
-                return null;
-        }
-    };
-
-    const formatScriptContent = (content) => {
+    const formatScriptContent = (content, name, language) => {
         const placeholders = {
             'method_tmpl': method,
             'server_tmpl': serverName,
@@ -49,6 +37,22 @@ export const FileLoader = ({method, endpoint, port, requestNumber, serverName, p
             'concurrency_tmpl': parallel
         };
 
+       switch (name)
+       {
+           case 'script-parallel.sh':
+               name = "Linux Script (Parallel)";
+               break;
+           case 'script-seriell.sh':
+               name = "Linux Script (Serial)";
+               break;
+           case 'windows-script-parallel.bat':
+               name = "Windows Script (Parallel)";
+               break;
+           case 'windows-script-seriell.bat':
+               name = "Windows Script (Serial)";
+               break;
+           default:
+       }
 
         for (const placeholder in placeholders) {
             if (content.includes(placeholder)) {
@@ -56,16 +60,47 @@ export const FileLoader = ({method, endpoint, port, requestNumber, serverName, p
             }
         }
 
-        return <SyntaxHighlighter children={content} language="bash"/>
-
+        return (
+            <div className="Generic-frame">
+                <h2 className="Generic-headline">{name}</h2>
+                    <div className="Code_block">
+                        <SyntaxHighlighter children={content} language={language} style={coy} wrapLongLines={true}/>
+                    </div>
+            </div>
+        )
 
     };
 
+    const specifyScript = (name, language) => {
+        const selectedScript = scriptContents.find((script) => script.fileName === name);
+         return selectedScript ? formatScriptContent(selectedScript.content, selectedScript.fileName, language): null;
+
+    };
+
+    const renderContent = () => {
+        switch (testKind) {
+            case 'seriell': {
+                return [
+                    specifyScript('script-seriell.sh', "bash"),
+                    specifyScript('windows-script-seriell.bat', "batch")
+                ];
+            }
+            case 'parallel': {
+                return [
+                    specifyScript('script-parallel.sh',"bash"),
+                    specifyScript('windows-script-parallel.bat', "batch")
+                ];
+            }
+            default: return null;
+        }
+    };
+
     return (
-            <div className="Code_block">
-                {renderContent()}
-            </div>
-    );
+        <div className="Script">
+            { renderContent()}
+        </div>
+    )
+
 }
 
 export default FileLoader;

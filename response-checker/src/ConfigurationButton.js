@@ -9,7 +9,7 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-export const buttonOptions = ['Run Checker', 'Create Curl'];
+export const buttonOptions = ['Run Checker', 'Create Script'];
 
 export default function ConfigurationButton({ callback })
 {
@@ -19,7 +19,6 @@ export default function ConfigurationButton({ callback })
 
 
     const handleClick = () => {
-        console.info(`You clicked ${buttonOptions[selectedIndex]}`);
         callback(buttonOptions[selectedIndex]);
 
     };

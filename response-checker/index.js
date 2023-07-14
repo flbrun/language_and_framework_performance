@@ -11,8 +11,8 @@ const createWindow = () => {
             nodeIntegration: true,
             contextIsolation: false,
         },
-        width: 800,
-        height: 600,
+        width: 1200,
+        height: 700,
         useContentSize: true,
     });
 

@@ -14,7 +14,7 @@
   justify-content: normal;
 }
 
-.Configuration-framing {
+.Generic-frame {
   border: 1px solid #d3d3d3;
   padding: 20px;
   position: relative;
@@ -23,10 +23,11 @@
   margin-top: 20px;
   margin-left: 20px;
   min-width: 485px;
+  max-width: 830px;
   display: flex;
 }
 
-.Configuration-headline {
+.Generic-headline {
   position: absolute;
   top: -23px;
   left: 20px;
@@ -50,17 +51,28 @@
 
   height: 45px;
   position: relative;
-  right: -20px;
+  right: -10px;
   top: 80px;
 
 }
 .configuration-button
 {
-  width: 145px;
+  width: 150px;
+}
+
+.Execution_block
+{
+  margin-top: 60px;
+  margin-left: 10px;
+  margin-bottom: 20px;
 }
 
 .Code_block
 {
-  white-space: pre-line;
-  font-family: monospace;
+  font-size: 12px;
 }
+.Script
+{
+  display: flex;
+}
+

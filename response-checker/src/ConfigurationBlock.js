@@ -30,8 +30,8 @@ export default function ConfigurationBlock({
                             }) {
     return (
         <div className="Configuration-block">
-            <div className="Configuration-framing">
-                <h2 className="Configuration-headline">Server Selection</h2>
+            <div className="Generic-frame">
+                <h2 className="Generic-headline">Server Selection</h2>
 
                 <TextField
                     id="protocol"
@@ -69,8 +69,8 @@ export default function ConfigurationBlock({
                 />
             </div>
 
-            <div className="Configuration-framing">
-                <h2 className="Configuration-headline">Endpoint</h2>
+            <div className="Generic-frame">
+                <h2 className="Generic-headline">Endpoint</h2>
 
                 <p className="punctuation">/</p>
                 <TextField
@@ -97,8 +97,8 @@ export default function ConfigurationBlock({
                 </TextField>
             </div>
 
-            <div className="Configuration-framing">
-                <h2 className="Configuration-headline">Test Configuration</h2>
+            <div className="Generic-frame">
+                <h2 className="Generic-headline">Test Configuration</h2>
 
                 <FormControl>
                     <RadioGroup
@@ -149,7 +149,7 @@ export default function ConfigurationBlock({
                                 type="number"
                                 size="small"
                                 id="parallel"
-                                label="Parallel Requests"
+                                label="Concurreny"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}

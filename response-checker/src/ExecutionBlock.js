@@ -1,5 +1,5 @@
 
-import {useEffect, useState} from "react";
+
 import FileLoader from "./FileLoader";
 
 
@@ -22,10 +22,9 @@ export default function ExecutionBlock({
            setConfigButton,
        }) {
 
-
-
-        if (configButton === "Create Curl") {
-            return <FileLoader
+    const renderContent = () => {
+        if (configButton === "Create Script") {
+            return<FileLoader
                 testKind={testKind}
                 method={method}
                 serverName={serverName}
@@ -33,6 +32,14 @@ export default function ExecutionBlock({
                 endpoint={endpoint}
                 requestNumber={requestNumber}/>
         }
-    return <p> {testKind}</p>
+    };
+
+
+    return (
+        <div className="Execution_block">
+            {renderContent()}
+        </div>
+    )
+
 
 }
