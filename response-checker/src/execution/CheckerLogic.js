@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {RawDataField} from "./RawDataField";
 const { ipcRenderer } = window.require('electron');
 
 export default function CheckerLogic({
@@ -27,7 +28,6 @@ export default function CheckerLogic({
         ipcRenderer.send('startLoadTest', loadTestOptions);
 
         ipcRenderer.on('loadTestResults', (event, results) => {
-            console.log(results);
             setResponses(results);
             setIsLoading(false);
         });
@@ -80,7 +80,8 @@ export default function CheckerLogic({
             <button onClick={handleClick2} disabled={isLoading}>
                 {isLoading ? "Loading..." : "Fetch Data2"}
             </button>
-            {rawDataFrame()}
+            {/*{rawDataFrame()}*/}
+            <RawDataField responses={responses}/>
         </div>
     )
 }

@@ -2,8 +2,8 @@ import './App.css';
 
 import React, { useState } from "react";
 
-import ConfigurationBlock from "./ConfigurationBlock";
-import ExecutionBlock from "./ExecutionBlock";
+import ConfigurationBlock from "./configuration/ConfigurationBlock";
+import ExecutionBlock from "./execution/ExecutionBlock";
 
 
 

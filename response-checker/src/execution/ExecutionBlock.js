@@ -1,8 +1,5 @@
-
-
 import ScriptLoader from "./ScriptLoader";
 import CheckerLogic from "./CheckerLogic";
-
 
 export default function ExecutionBlock({
            selectedProtocol,
