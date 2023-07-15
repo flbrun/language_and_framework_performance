@@ -1,6 +1,11 @@
+
+
 const { app, BrowserWindow, ipcMain } = require('electron');
+const fetch = require('electron-fetch').default;
+
 const path = require('path');
 const fs = require('fs');
+const {wait} = require("@testing-library/user-event/dist/utils");
 
 const indexPath = path.join(__dirname, 'build', 'index.html');
 const scriptsPath = path.join(__dirname, 'scripts');
@@ -21,40 +26,62 @@ const createWindow = () => {
 
 app.on('ready', createWindow);
 
-async function sendScriptsToRenderer(webContents) {
-    try {
-        const scriptFiles = await fs.promises.readdir(scriptsPath);
-
-        const scriptContents = await Promise.all(
-            scriptFiles.map(async (file) => {
-                const filePath = path.join(scriptsPath, file);
-                const content = await fs.promises.readFile(filePath, 'utf-8');
-                return { fileName: file, content };
-            })
-        );
-
-        webContents.send('script-contents', scriptContents);
-    } catch (error) {
-        console.error('Error reading script files:', error);
-    }
-}
-
 ipcMain.handle('script-contents', async (event) => {
     try {
         const scriptFiles = await fs.promises.readdir(scriptsPath);
 
-        const scriptContents = await Promise.all(
+        return await Promise.all(
             scriptFiles.map(async (file) => {
                 const filePath = path.join(scriptsPath, file);
                 const content = await fs.promises.readFile(filePath, 'utf-8');
-                return { fileName: file, content };
+                return {fileName: file, content};
             })
         );
-
-        return scriptContents;
     } catch (error) {
         console.error('Error getting script contents:', error);
         throw error;
+    }
+});
+
+ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
+    const responses = [];
+    try {
+        const {selectedProtocol, serverName, port, endpoint, requestNumber} = loadTestOptions;
+        const url = `${selectedProtocol}${serverName}:${port}/${endpoint}`;
+
+
+
+        // Server is available, proceed with load test
+        for (let i = 0; i < requestNumber; i++) {
+
+            const startTime = performance.now();
+            const response = await fetch(url);
+            const endTime = performance.now();
+            const duration = (endTime - startTime).toFixed(1);
+            const responseBody = await response.text();
+            const responseStatus = response.status;
+            const responseHeaders = response.headers;
+
+            responses.push({
+                responseStatus: responseStatus,
+                responseBody: responseBody,
+                responseHeaders: responseHeaders,
+                duration: duration
+            })
+        }
+
+
+        event.sender.send('loadTestResults', responses);
+
+    }catch (error)
+    {
+        responses.push({
+            responseStatus: "Err",
+            responseBody: error.toString(),
+            responseHeaders: "",
+            duration: ""
+        })
+        event.sender.send('loadTestResults', responses);
     }
 });
 

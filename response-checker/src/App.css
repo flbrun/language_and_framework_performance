@@ -76,3 +76,38 @@
   display: flex;
 }
 
+.successFrame
+{
+  border: 1px solid #00ff00;
+  width: max-content;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-left: 5px;
+  min-width: 485px;
+  max-width: 830px;
+  display: flex;
+}
+
+.warningFrame
+{
+  border: 1px solid #ffa500;
+  width: max-content;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-left: 5px;
+  min-width: 485px;
+  max-width: 830px;
+  display: flex;
+}
+
+.failureFrame
+{
+  border: 2px solid #ff0000;
+  width: max-content;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-left: 5px;
+  min-width: 485px;
+  max-width: 830px;
+  display: flex;
+}

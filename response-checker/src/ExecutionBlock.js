@@ -1,6 +1,7 @@
 
 
 import ScriptLoader from "./ScriptLoader";
+import CheckerLogic from "./CheckerLogic";
 
 
 export default function ExecutionBlock({
@@ -27,6 +28,15 @@ export default function ExecutionBlock({
             return<ScriptLoader
                 testKind={testKind}
                 method={method}
+                serverName={serverName}
+                port={port}
+                endpoint={endpoint}
+                requestNumber={requestNumber}/>
+        }
+        if(configButton === "Run Checker")
+        {
+            return <CheckerLogic
+                selectedProtocol={selectedProtocol}
                 serverName={serverName}
                 port={port}
                 endpoint={endpoint}

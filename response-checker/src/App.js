@@ -49,6 +49,7 @@ function App() {
                 />
                 <ExecutionBlock
                     requestNumber={requestsNumber}
+                    selectedProtocol={selectedProtocol}
                     serverName={serverName}
                     port={port}
                     endpoint={endpoint}
