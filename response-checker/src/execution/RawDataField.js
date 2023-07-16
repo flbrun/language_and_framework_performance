@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Paper from "@mui/material/Paper";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
+import {
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow
+} from "@mui/material";
 
 const columns = [
     { id: 'id', label: 'ID', sortable: true },
@@ -14,6 +26,7 @@ export const RawDataField = ({ responses }) => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [sortField, setSortField] = useState('id');
     const [sortOrder, setSortOrder] = useState('asc');
+    const [expandedRows, setExpandedRows] = useState([]);
 
     const handleSort = (field) => {
         const column = columns.find((col) => col.id === field);
@@ -58,8 +71,19 @@ export const RawDataField = ({ responses }) => {
         setPage(0);
     };
 
+    const toggleRow = (id) => {
+        const expandedRowsCopy = [...expandedRows];
+        const index = expandedRowsCopy.indexOf(id);
+        if (index > -1) {
+            expandedRowsCopy.splice(index, 1);
+        } else {
+            expandedRowsCopy.push(id);
+        }
+        setExpandedRows(expandedRowsCopy);
+    };
+
     return (
-        <Paper sx={{ width: '400px', overflow: 'hidden' }}>
+        <Paper sx={{ width: '500px', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -74,30 +98,50 @@ export const RawDataField = ({ responses }) => {
                                     {column.label}
                                     {column.sortable && (
                                         <span style={{ marginLeft: '4px', display: 'inline-block', transform: sortField === column.id ? `rotate(${sortOrder === 'asc' ? '180deg' : '0deg'})` : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                      ▼
-                    </span>
+                                          ▼
+                                        </span>
                                     )}
                                 </TableCell>
                             ))}
+                            <TableCell />
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
+                                const isRowExpanded = expandedRows.includes(row.id);
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.format && typeof value === 'number'
-                                                        ? column.format(value)
-                                                        : value}
+                                    <React.Fragment key={row.id}>
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                            {columns.map((column) => {
+                                                const value = row[column.id];
+                                                return (
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        {column.format && typeof value === 'number'
+                                                            ? column.format(value)
+                                                            : value}
+                                                    </TableCell>
+                                                );
+                                            })}
+                                            <TableCell>
+                                                <IconButton
+                                                    aria-label="expand row"
+                                                    size="small"
+                                                    onClick={() => toggleRow(row.id)}
+                                                >
+                                                    {isRowExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                        {isRowExpanded && (
+                                            <TableRow>
+                                                <TableCell colSpan={columns.length + 1}>
+                                                    <div>{row.body}, {row.headers}</div>
                                                 </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
+                                            </TableRow>
+                                        )}
+                                    </React.Fragment>
                                 );
                             })}
                     </TableBody>
