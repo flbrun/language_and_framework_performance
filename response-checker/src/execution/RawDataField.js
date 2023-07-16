@@ -4,6 +4,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import {
+    Dialog, DialogContent, DialogContentText, DialogTitle,
     IconButton,
     Table,
     TableBody,
@@ -13,6 +14,7 @@ import {
     TablePagination,
     TableRow
 } from "@mui/material";
+import Button from "@mui/material/Button";
 
 const columns = [
     { id: 'id', label: 'ID', sortable: true },
@@ -27,6 +29,7 @@ export const RawDataField = ({ responses }) => {
     const [sortField, setSortField] = useState('id');
     const [sortOrder, setSortOrder] = useState('asc');
     const [expandedRows, setExpandedRows] = useState([]);
+    const [open, setOpen] = React.useState(false);
 
     const handleSort = (field) => {
         const column = columns.find((col) => col.id === field);
@@ -39,6 +42,44 @@ export const RawDataField = ({ responses }) => {
             }
         }
     };
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const dialogField = (body) =>
+    {
+        return  (
+            <Dialog open={open}
+                    onClose={handleClose}
+                    scroll={"paper"}
+                    aria-labelledby="scroll-dialog-title"
+                    aria-describedby="scroll-dialog-description">
+                <DialogTitle id="scroll-dialog-title">Request Body</DialogTitle>
+                <DialogContent dividers={true}>
+                    <DialogContentText
+                        id="scroll-dialog-description"
+                        ref={descriptionElementRef}
+                        tabIndex={-1}>
+                        {body}
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
+        );
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const descriptionElementRef = React.useRef(null);
+    React.useEffect(() => {
+        if (open) {
+            const { current: descriptionElement } = descriptionElementRef;
+            if (descriptionElement !== null) {
+                descriptionElement.focus();
+            }
+        }
+    }, [open]);
 
     useEffect(() => {
         let tempRows = responses.map((response, index) => ({
@@ -100,31 +141,37 @@ export const RawDataField = ({ responses }) => {
     {
         try {
             return (
-                <Table size="small" style={{ fontSize: '12px' }}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell key="header" colSpan={2}><b>Header</b></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell key="headerName"><b>Name</b></TableCell>
-                            <TableCell key="headerValue"><b>Value</b></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {row.headers.map((header, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{header.name}</TableCell>
-                                <TableCell>{header.value}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <div>
+                    <Button variant="outlined" onClick={handleClickOpen}>Show Body</Button>
+                    {dialogField(row.body)}
+                        <Table size="small" sx={{ fontSize: '12px'}}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell key="header" colSpan={2}><b>Header</b></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell key="headerName"><b>Name</b></TableCell>
+                                    <TableCell key="headerValue"><b>Value</b></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {row.headers.map((header, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{header.name}</TableCell>
+                                        <TableCell sx={{ maxWidth: "350px", wordBreak: "break-word" }}>{header.value}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+
+                </div>
+
             );
         }catch (err){ return <p>No Data</p>}
     }
 
     return (
-        <Paper sx={{ width: '500px', overflow: 'hidden' }}>
+        <Paper sx={{ maxWidth: '500px' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
