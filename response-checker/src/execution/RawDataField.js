@@ -82,6 +82,47 @@ export const RawDataField = ({ responses }) => {
         setExpandedRows(expandedRowsCopy);
     };
 
+    const getRowBackgroundColor = (statusCode) => {
+        if (statusCode >= 200 && statusCode <= 299) {
+            return  "#eaffeb";
+        } else if (statusCode >= 300 && statusCode <= 399) {
+            return "#ebeaff";
+        } else if (statusCode >= 400 && statusCode <= 499) {
+            return "#fff6ea";
+        } else if (statusCode >= 500 && statusCode <= 599 || statusCode ==="Err") {
+            return  "#ffebea";
+        } else {
+            return "inherit";
+        }
+    };
+
+    const rowDetails = (row) =>
+    {
+        try {
+            return (
+                <Table size="small" style={{ fontSize: '12px' }}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell key="header" colSpan={2}><b>Header</b></TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell key="headerName"><b>Name</b></TableCell>
+                            <TableCell key="headerValue"><b>Value</b></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {row.headers.map((header, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{header.name}</TableCell>
+                                <TableCell>{header.value}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            );
+        }catch (err){ return <p>No Data</p>}
+    }
+
     return (
         <Paper sx={{ width: '500px', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 440 }}>
@@ -92,12 +133,18 @@ export const RawDataField = ({ responses }) => {
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth, cursor: column.sortable ? 'pointer' : 'default' }}
+                                    style={{
+                                        minWidth: column.minWidth,
+                                        cursor: column.sortable ? 'pointer' : 'default' }}
                                     onClick={() => handleSort(column.id)}
                                 >
                                     {column.label}
                                     {column.sortable && (
-                                        <span style={{ marginLeft: '4px', display: 'inline-block', transform: sortField === column.id ? `rotate(${sortOrder === 'asc' ? '180deg' : '0deg'})` : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                                        <span style={{
+                                            marginLeft: '4px',
+                                            display: 'inline-block',
+                                            transform: sortField === column.id ? `rotate(${sortOrder === 'asc' ? '180deg' : '0deg'})` : 'rotate(0deg)',
+                                            transition: 'transform 0.2s' }}>
                                           ▼
                                         </span>
                                     )}
@@ -113,7 +160,7 @@ export const RawDataField = ({ responses }) => {
                                 const isRowExpanded = expandedRows.includes(row.id);
                                 return (
                                     <React.Fragment key={row.id}>
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        <TableRow hover tabIndex={-1} sx={{ backgroundColor: getRowBackgroundColor(row.statusCode)}}>
                                             {columns.map((column) => {
                                                 const value = row[column.id];
                                                 return (
@@ -137,7 +184,7 @@ export const RawDataField = ({ responses }) => {
                                         {isRowExpanded && (
                                             <TableRow>
                                                 <TableCell colSpan={columns.length + 1}>
-                                                    <div>{row.body}, {row.headers}</div>
+                                                    {rowDetails(row)}
                                                 </TableCell>
                                             </TableRow>
                                         )}

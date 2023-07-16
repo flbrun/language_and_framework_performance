@@ -50,8 +50,6 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
         const url = `${selectedProtocol}${serverName}:${port}/${endpoint}`;
 
 
-
-        // Server is available, proceed with load test
         for (let i = 0; i < requestNumber; i++) {
 
             const startTime = performance.now();
@@ -60,12 +58,21 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
             const duration = (endTime - startTime).toFixed(1);
             const responseBody = await response.text();
             const responseStatus = response.status;
-            const responseHeaders = response.headers;
+            const responseHeaders = Array.from(response.headers.entries());
+            let header  = [];
+
+            for (let [name, value] of responseHeaders) {
+                header.push(
+                    {
+                        name: name,
+                        value: value
+                    })
+            }
 
             responses.push({
                 responseStatus: responseStatus,
                 responseBody: responseBody,
-                responseHeaders: responseHeaders,
+                responseHeaders: header,
                 duration: duration
             })
         }
