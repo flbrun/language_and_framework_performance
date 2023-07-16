@@ -61,6 +61,7 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
             const responseHeaders = Array.from(response.headers.entries());
             let header  = [];
 
+
             for (let [name, value] of responseHeaders) {
                 header.push(
                     {

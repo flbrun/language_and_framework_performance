@@ -48,7 +48,11 @@ export const RawDataField = ({ responses }) => {
     };
     const dialogField = (body) =>
     {
-        return  (
+        if (!body || body.trim() === "") {
+            body = "No Data";
+        }
+
+        return (
             <Dialog open={open}
                     onClose={handleClose}
                     scroll={"paper"}
@@ -70,6 +74,8 @@ export const RawDataField = ({ responses }) => {
     const handleClose = () => {
         setOpen(false);
     };
+
+
 
     const descriptionElementRef = React.useRef(null);
     React.useEffect(() => {
@@ -167,7 +173,7 @@ export const RawDataField = ({ responses }) => {
                 </div>
 
             );
-        }catch (err){ return <p>No Data</p>}
+        }catch (err){ return <p>No Data {err}</p>}
     }
 
     return (
