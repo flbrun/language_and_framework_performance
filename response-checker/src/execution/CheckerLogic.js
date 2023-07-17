@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {RawDataField} from "./RawDataField";
+import {DurationOverTime} from "./durationOverTime";
 const { ipcRenderer } = window.require('electron');
 
 export default function CheckerLogic({
@@ -33,55 +34,19 @@ export default function CheckerLogic({
         });
     };
 
-    const rawDataFormat = (data) =>
-    {
-        return (
-            <div>
-                <p>Duration: {data.duration} ms</p>
-                <p>Response Status: {data.responseStatus}</p>
-                <p>Response Header: {data.responseHeader}</p>
-                <p>Response Body: {data.responseBody}</p>
-            </div>
-        )
-    }
-
-    function rawDataFrame()
-    {
-       return responses.map((response) => {
-            if (response.responseStatus === 200)
-            {
-                return (
-                    <div className="successFrame">
-                        {rawDataFormat(response)}
-                    </div>
-                )
-            }
-            if (response.responseStatus === 404)
-            {
-                return (
-                    <div className="warningFrame">
-                        {rawDataFormat(response)}
-                    </div>
-                )
-            }
-            else
-            {
-                return (
-                    <div className="failureFrame">
-                        {rawDataFormat(response)}
-                    </div>
-                )
-            }
-        })
-    }
-
     return (
         <div>
             <button onClick={handleClick2} disabled={isLoading}>
                 {isLoading ? "Loading..." : "Fetch Data2"}
             </button>
-            {/*{rawDataFrame()}*/}
-            <RawDataField responses={responses}/>
+            <div className="datafields">
+                <div className="dataElement">
+                    <RawDataField responses={responses}/>
+                </div>
+                <div className="dataElement">
+                    <DurationOverTime responses={responses}/>
+                </div>
+            </div>
         </div>
     )
 }

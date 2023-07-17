@@ -4,7 +4,10 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import {
-    Dialog, DialogContent, DialogContentText, DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     IconButton,
     Table,
     TableBody,
@@ -136,7 +139,7 @@ export const RawDataField = ({ responses }) => {
             return "#ebeaff";
         } else if (statusCode >= 400 && statusCode <= 499) {
             return "#fff6ea";
-        } else if (statusCode >= 500 && statusCode <= 599 || statusCode ==="Err") {
+        } else if ((statusCode >= 500 && statusCode <= 599) || statusCode ==="Err") {
             return  "#ffebea";
         } else {
             return "inherit";
@@ -177,8 +180,8 @@ export const RawDataField = ({ responses }) => {
     }
 
     return (
-        <Paper sx={{ maxWidth: '500px' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+        <Paper sx={{ width: '500px',minHeight:'100px',  maxHeight: '500px',}}>
+            <TableContainer sx={{width: '500px', maxHeight:'450px' }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -248,6 +251,7 @@ export const RawDataField = ({ responses }) => {
                 </Table>
             </TableContainer>
             <TablePagination
+                sx={{height:'60px'}}
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
                 count={rows.length}

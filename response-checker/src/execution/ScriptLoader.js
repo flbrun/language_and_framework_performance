@@ -8,7 +8,6 @@ const { ipcRenderer } = window.require('electron');
 export const ScriptLoader = ({method, endpoint, port, requestNumber, serverName, parallel, testKind}) => {
 
     const [scriptContents, setScriptContents] = useState([]);
-    let [headlineText, setHeadlineText] = useState('Test');
 
     useEffect(() => {
 

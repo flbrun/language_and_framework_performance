@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>de.comparison</groupId>
-    <artifactId>spring-boot</artifactId>
+    <artifactId>spring-boot-tomcat</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-boot</name>
     <description>spring-boot</description>
