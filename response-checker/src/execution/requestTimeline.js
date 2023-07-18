@@ -26,8 +26,6 @@ export const RequestTimeline = ({ responses }) => {
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
 
-    const [dataSet, setDataSet] = useState([]);
-
     useEffect(() => {
 
         if (chartInstanceRef.current) {

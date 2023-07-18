@@ -251,7 +251,7 @@ export const RawDataTable = ({ responses }) => {
             </TableContainer>
             <TablePagination
                 sx={{height:'60px'}}
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[10, 25, 100, 1000, 5000]}
                 component="div"
                 count={rows.length}
                 rowsPerPage={rowsPerPage}

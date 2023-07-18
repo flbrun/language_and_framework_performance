@@ -41,7 +41,7 @@ export default function CheckerLogic({
                 {isLoading ? "Loading..." : "Fetch Data2"}
             </button>
             <div className="datafields">
-                <div className="dataElement">
+                <div className="dataTable">
                     <RawDataTable responses={responses}/>
                 </div>
                 <div className="dataElement">

@@ -82,10 +82,18 @@
 .dataElement
 {
   margin-left: 20px;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+}
+.dataTable
+{
+  margin-left: 20px;
 }
 
 .responseTimeLine
 {
+  display: flex;
+  justify-content: center;
   pointer-events: none;
 }
 
