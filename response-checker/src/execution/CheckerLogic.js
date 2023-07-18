@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import {RawDataField} from "./RawDataField";
-import {DurationOverTime} from "./durationOverTime";
+import {RawDataTable} from "./RawDataTable";
+import {RequestTimeline} from "./requestTimeline";
 const { ipcRenderer } = window.require('electron');
 
 export default function CheckerLogic({
@@ -41,10 +41,10 @@ export default function CheckerLogic({
             </button>
             <div className="datafields">
                 <div className="dataElement">
-                    <RawDataField responses={responses}/>
+                    <RawDataTable responses={responses}/>
                 </div>
                 <div className="dataElement">
-                    <DurationOverTime responses={responses}/>
+                    <RequestTimeline responses={responses}/>
                 </div>
             </div>
         </div>

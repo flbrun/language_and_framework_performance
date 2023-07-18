@@ -22,7 +22,7 @@ ChartJS.register(
     Legend
 );
 
-export const DurationOverTime = ({ responses }) => {
+export const RequestTimeline = ({ responses }) => {
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null);
 
@@ -59,13 +59,13 @@ export const DurationOverTime = ({ responses }) => {
                             type: 'linear',
                             title: {
                                 display: true,
-                                text: 'Index',
+                                text: 'Request Number',
                             },
                         },
                         y: {
                             title: {
                                 display: true,
-                                text: 'Duration',
+                                text: 'Response Time (ms)',
                             },
                         },
                     },

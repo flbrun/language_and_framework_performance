@@ -25,7 +25,7 @@ const columns = [
     { id: 'duration', label: 'Response Time (ms)', sortable: true },
 ];
 
-export const RawDataField = ({ responses }) => {
+export const RawDataTable = ({ responses }) => {
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
