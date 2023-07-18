@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {RawDataTable} from "./RawDataTable";
 import {RequestTimeline} from "./requestTimeline";
+import {FetchInformations} from "./FetchInformations";
 const { ipcRenderer } = window.require('electron');
 
 export default function CheckerLogic({
@@ -45,6 +46,9 @@ export default function CheckerLogic({
                 </div>
                 <div className="dataElement">
                     <RequestTimeline responses={responses}/>
+                </div>
+                <div className="dataElement">
+                    <FetchInformations responses={responses}/>
                 </div>
             </div>
         </div>

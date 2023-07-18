@@ -77,7 +77,7 @@ export const RequestTimeline = ({ responses }) => {
     }, [responses]);
 
 
-    return (<canvas ref={chartRef} width={500} height={500} />);
+    return (<canvas  className="responseTimeLine" ref={chartRef} width={500} height={500} />);
 };
 
 
