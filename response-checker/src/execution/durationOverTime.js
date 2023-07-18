@@ -1,31 +1,87 @@
-import { Brush, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    registerables,
+    Title,
+    Tooltip,
+    Legend, Chart,
+} from 'chart.js';
+
+ChartJS.register(
+    CategoryScale,
+    ...registerables,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 export const DurationOverTime = ({ responses }) => {
-    const [brushData, setBrushData] = useState({});
-    const [data, setData] = useState([{ x: 0, y: 0 }]);
+    const chartRef = useRef(null);
+    const chartInstanceRef = useRef(null);
 
-    // function createDatafield() {
-    //     return responses.map((response, index) => {
-    //         return { x: index, y: response.duration };
-    //     });
-    // }
+    const [dataSet, setDataSet] = useState([]);
 
-    const handleBrushChange = (data) => {
-        setBrushData(data);
-    };
+    useEffect(() => {
 
-    // setData(createDatafield());
+        if (chartInstanceRef.current) {
+            chartInstanceRef.current.destroy();
+        }
 
-    return (
-        <ResponsiveContainer width={500} height={500}>
-            <LineChart data={responses}>
-                <XAxis dataKey="index" label={{ value: "Request Index", position: "insideBottom" }} />
-                <YAxis label={{ value: "Duration in ms", angle: -90, position: "insideLeft", offset: 20 }} />
-                <CartesianGrid stroke="#f5f5f5" />
-                <Line type="monotone" dataKey="duration" stroke="#0074fe" dot={false} yAxisId={0} />
-                <Brush dataKey="index" height={30} stroke="#0074fe" onChange={handleBrushChange} />
-            </LineChart>
-        </ResponsiveContainer>
-    );
+        if (chartRef.current) {
+            const data = responses.map((response, index) => ({ x: index, y: response.duration }));
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    datasets: [
+                        {
+                            data: data,
+                            borderColor: 'rgb(53, 162, 235)',
+                            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                            pointRadius: 0,
+                        },
+                    ],
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Index',
+                            },
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Duration',
+                            },
+                        },
+                    },
+                },
+            };
+
+            chartInstanceRef.current = new Chart(chartRef.current, chartConfig);
+        }
+    }, [responses]);
+
+
+    return (<canvas ref={chartRef} width={500} height={500} />);
 };
+
+
+
+
+
+

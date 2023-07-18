@@ -78,9 +78,8 @@ export const RawDataField = ({ responses }) => {
         setOpen(false);
     };
 
-
-
     const descriptionElementRef = React.useRef(null);
+
     React.useEffect(() => {
         if (open) {
             const { current: descriptionElement } = descriptionElementRef;
