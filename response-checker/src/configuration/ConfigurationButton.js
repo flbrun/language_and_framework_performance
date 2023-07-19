@@ -11,16 +11,19 @@ import MenuList from '@mui/material/MenuList';
 
 export const buttonOptions = ['Run Checker', 'Create Script'];
 
-export default function ConfigurationButton({ callback })
-{
+export default function ConfigurationButton({ configuration, runChecker, setRunChecker }) {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
-
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
     const handleClick = () => {
-        callback(buttonOptions[selectedIndex]);
-
+        const selectedOption = buttonOptions[selectedIndex];
+        if (selectedOption === 'Run Checker') {
+            setRunChecker(true);
+            configuration(buttonOptions[selectedIndex]);
+        } else if (selectedOption === 'Create Script') {
+            configuration(buttonOptions[selectedIndex]);
+        }
     };
 
     const handleMenuItemClick = (event, index) => {
@@ -43,7 +46,9 @@ export default function ConfigurationButton({ callback })
     return (
         <React.Fragment>
             <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button" className="configuration-button-group">
-                <Button className="configuration-button" onClick={handleClick}>{buttonOptions[selectedIndex]}</Button>
+                <Button className="configuration-button" onClick={handleClick}>
+                    {buttonOptions[selectedIndex]}
+                </Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -69,8 +74,7 @@ export default function ConfigurationButton({ callback })
                     <Grow
                         {...TransitionProps}
                         style={{
-                            transformOrigin:
-                                placement === 'bottom' ? 'center top' : 'center bottom',
+                            transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
                         }}
                     >
                         <Paper>
@@ -78,7 +82,7 @@ export default function ConfigurationButton({ callback })
                                 <MenuList id="split-button-menu" autoFocusItem>
                                     {buttonOptions.map((option, index) => (
                                         <MenuItem
-                                            sx={{width: '20ch' }}
+                                            sx={{ width: '20ch' }}
                                             key={option}
                                             selected={index === selectedIndex}
                                             onClick={(event) => handleMenuItemClick(event, index)}

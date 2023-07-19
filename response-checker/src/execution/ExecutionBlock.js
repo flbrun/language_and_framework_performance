@@ -2,6 +2,10 @@ import ScriptLoader from "./ScriptLoader";
 import CheckerLogic from "./CheckerLogic";
 
 export default function ExecutionBlock({
+           runChecker,
+           setRunChecker,
+           setIsLoading,
+           isLoading,
            selectedProtocol,
            setSelectedProtocol,
            serverName,
@@ -33,6 +37,10 @@ export default function ExecutionBlock({
         if(configButton === "Run Checker")
         {
             return <CheckerLogic
+                runChecker={runChecker}
+                setRunChecker={setRunChecker}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
                 selectedProtocol={selectedProtocol}
                 serverName={serverName}
                 port={port}
@@ -40,7 +48,6 @@ export default function ExecutionBlock({
                 requestNumber={requestNumber}/>
         }
     };
-
 
     return (
         <div className="Execution_block">

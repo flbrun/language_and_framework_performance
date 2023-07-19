@@ -17,11 +17,13 @@
     "electron-fetch": "^1.9.1",
     "faker": "^6.6.6",
     "node": "^20.4.0",
+    "randomcolor": "^0.6.2",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "react-syntax-highlighter": "^15.5.0",
+    "systeminformation": "^5.18.7",
     "uplot": "^1.6.24",
     "web-vitals": "^2.1.4"
   },

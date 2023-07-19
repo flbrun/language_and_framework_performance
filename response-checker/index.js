@@ -6,9 +6,11 @@ const fetch = require('electron-fetch').default;
 const path = require('path');
 const fs = require('fs');
 const {wait} = require("@testing-library/user-event/dist/utils");
+const si = require('systeminformation');
 
 const indexPath = path.join(__dirname, 'build', 'index.html');
 const scriptsPath = path.join(__dirname, 'scripts');
+let cpuLoadActive = false;
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
@@ -19,6 +21,7 @@ const createWindow = () => {
         width: 1200,
         height: 700,
         useContentSize: true,
+        icon: __dirname + 'public/favicon.ico'
     });
 
     initializeWindow(mainWindow);
@@ -49,6 +52,11 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
         const {selectedProtocol, serverName, port, endpoint, requestNumber} = loadTestOptions;
         const url = `${selectedProtocol}${serverName}:${port}/${endpoint}`;
 
+        if(loadTestOptions.cpuLoad && (requestNumber > 0)) {
+            cpuLoadActive = true;
+            cpuLoad(event);
+        }
+
 
         for (let i = 0; i < requestNumber; i++) {
 
@@ -76,10 +84,11 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
                 responseHeaders: header,
                 duration: duration
             })
+
         }
 
-
         event.sender.send('loadTestResults', responses);
+        cpuLoadActive = false;
 
     }catch (error)
     {
@@ -90,8 +99,21 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
             duration: ""
         })
         event.sender.send('loadTestResults', responses);
+        cpuLoadActive = false;
     }
 });
+
+async function cpuLoad(event) {
+    while (cpuLoadActive) {
+        try {
+            const data = await si.cpuCurrentSpeed();
+            event.sender.send('cpuLoad', data.cores);
+            await new Promise((resolve) => setTimeout(resolve, 500));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}
 
 async function initializeWindow(mainWindow) {
     await mainWindow.loadFile(indexPath);

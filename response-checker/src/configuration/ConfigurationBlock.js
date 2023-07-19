@@ -9,6 +9,8 @@ const methods = ['GET'];
 
 localStorage.setItem("adad", "asdasd")
 export default function ConfigurationBlock({
+                                runChecker,
+                                setRunChecker,
                                 selectedProtocol,
                                 setSelectedProtocol,
                                 serverName,
@@ -76,7 +78,7 @@ export default function ConfigurationBlock({
                 <TextField
                     id="endpoint"
                     label="Endpoint"
-                    sx={{ m: 1, width: '40ch' }}
+                    sx={{ m: 1, width: '37ch' }}
                     variant="outlined"
                     value={endpoint}
                     onChange={(e) => setEndpoint(e.target.value)}
@@ -174,8 +176,10 @@ export default function ConfigurationBlock({
                     ):(<div style={{width:146}}></div>)
                 }
 
-                <ConfigurationButton callback={setConfigButton} />
-
+                <ConfigurationButton
+                    configuration={setConfigButton}
+                    runChecker={runChecker}
+                    setRunChecker={setRunChecker}/>
             </div>
         </div>
     );

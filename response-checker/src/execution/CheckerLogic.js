@@ -1,56 +1,86 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {RawDataTable} from "./RawDataTable";
 import {RequestTimeline} from "./requestTimeline";
 import {FetchInformations} from "./FetchInformations";
+import {CpuLoad} from "./cpuLoad";
 const { ipcRenderer } = window.require('electron');
 
 export default function CheckerLogic({
+                                         runChecker,
+                                         setRunChecker,
                                          selectedProtocol,
                                          serverName,
                                          port,
                                          endpoint,
                                          requestNumber,
+                                         isLoading,
+                                         setIsLoading,
                                          method,
                                          testKind,
                                          parallel,
                                      }) {
     const [responses, setResponses] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [cpuLoad, setCpuLoad] = useState([]);
+    const [showData, setShowData] = useState(false);
 
-    const handleClick2 = async() => {
-        setIsLoading(true);
-        const loadTestOptions = {
-            selectedProtocol: selectedProtocol,
-            serverName: serverName,
-            port: port,
-            endpoint: endpoint,
-            requestNumber: requestNumber,
+
+    useEffect(() => {
+        if (runChecker && (requestNumber>0)) {
+            setIsLoading(true);
+            setShowData(false);
+            const loadTestOptions = {
+                selectedProtocol: selectedProtocol,
+                serverName: serverName,
+                port: port,
+                endpoint: endpoint,
+                requestNumber: requestNumber,
+                cpuLoad: true,
+            };
+
+            ipcRenderer.send('startLoadTest', loadTestOptions);
+
+            ipcRenderer.on('loadTestResults', (event, results) => {
+                setResponses(results);
+                setIsLoading(false);
+                setShowData(true);
+            });
+
+            ipcRenderer.on('cpuLoad', (event, results) => {
+                setCpuLoad(results);
+            });
+
+            setRunChecker(false);
+        }
+        else
+        {
+            setRunChecker(false);
+        }
+
+        return () => {
+            ipcRenderer.removeAllListeners('script-contents');
         };
+    }, [runChecker]);
 
-        ipcRenderer.send('startLoadTest', loadTestOptions);
-
-        ipcRenderer.on('loadTestResults', (event, results) => {
-            setResponses(results);
-            setIsLoading(false);
-        });
-    };
 
     return (
         <div>
-            <button onClick={handleClick2} disabled={isLoading}>
-                {isLoading ? "Loading..." : "Fetch Data2"}
-            </button>
-            <div className="datafields">
-                <div className="dataTable">
-                    <RawDataTable responses={responses}/>
+            {showData && responses.length > 0 &&(
+                <div className="datafields">
+                    <div className="dataTable">
+                        <RawDataTable responses={responses} />
+                    </div>
+                    <div className="dataElement">
+                        <RequestTimeline responses={responses} />
+                    </div>
+                    <div className="dataElement">
+                        <FetchInformations responses={responses} />
+                    </div>
                 </div>
-                <div className="dataElement">
-                    <RequestTimeline responses={responses}/>
-                </div>
-                <div className="dataElement">
-                    <FetchInformations responses={responses}/>
-                </div>
-            </div>
+            )}
+            {(!showData) && (
+                <div></div>
+            )}
+                <CpuLoad cpuLoads={cpuLoad} isloading={isLoading} />
         </div>
-    )
+    );
 }

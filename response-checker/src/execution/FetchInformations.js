@@ -44,7 +44,7 @@ export const FetchInformations = ({responses}) =>
             const chartConfig = {
                 type: 'boxplot',
                 data: {
-                    labels: ["",],
+                    labels: [],
                     datasets: [
                         {
                             label: "Dataset 1",
