@@ -38,6 +38,8 @@ export const CpuLoad = ({ cpuLoads, isloading }) => {
                     datasets: []
                 },
                 options: {
+                    responsive: false,
+                    animation: false,
                     scales: {
                         y: {
                             min: 0,
@@ -59,8 +61,12 @@ export const CpuLoad = ({ cpuLoads, isloading }) => {
 
         const updateChart = () => {
             let randomColors = [];
+            let randomColorsBackground = [];
+            console.log(randomColors);
             cpuLoads.forEach((cpuLoad, index) => {
-                randomColors[index] = randomColor();
+                randomColors[index] = randomColor({luminosity: 'light', format: 'rgba', alpha: 1 });
+                randomColorsBackground[index] = randomColors[index].replace(/[\d.]+\)$/g, 0.3 + ')');
+
                 if (index < chartRef.current.data.datasets.length) {
                     const dataset = chartRef.current.data.datasets[index];
                     dataset.data.push(cpuLoad);
@@ -69,18 +75,20 @@ export const CpuLoad = ({ cpuLoads, isloading }) => {
                         dataset.data.shift();
                     }
                 } else {
-                    // This block of code should be moved outside the forEach loop
                 }
             });
 
             // Add new datasets outside the forEach loop
             if (chartRef.current.data.datasets.length < cpuLoads.length) {
                 for (let i = chartRef.current.data.datasets.length; i < cpuLoads.length; i++) {
+
                     const newDataset = {
                         label: `CPU ${i + 1} Load`,
                         data: [cpuLoads[i]],
-                        borderWidth: 1,
-                        borderColor: randomColors[i],
+                        borderWidth: i === 0 ? 3 : 1,
+                        fill: true,
+                         backgroundColor: i ===0 ? 'rgba(217, 30, 24, 0.3)': randomColorsBackground[i],
+                        borderColor: i ===0 ? 'rgba(217, 30, 24, 1)': randomColors[i],
                         pointRadius: 0,
                     };
                     chartRef.current.data.datasets.push(newDataset);

@@ -40,7 +40,7 @@ export const RequestTimeline = ({ responses }) => {
                     datasets: [
                         {
                             data: data,
-                            borderColor: 'rgb(53, 162, 235)',
+                            borderColor: '#1a77d3',
                             backgroundColor: 'rgba(53, 162, 235, 0.5)',
                             pointRadius: 0,
                         },

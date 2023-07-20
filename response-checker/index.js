@@ -104,11 +104,18 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
 });
 
 async function cpuLoad(event) {
+     const cores = (await si.cpu()).cores
+    let data = [];
+
     while (cpuLoadActive) {
         try {
-            const data = await si.cpuCurrentSpeed();
-            event.sender.send('cpuLoad', data.cores);
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            data[0] = (await si.currentLoad()).currentLoad;
+            for(let i = 0; i<cores; i++)
+            {
+                data[i+1] = (await si.currentLoad()).cpus[i].load;
+            }
+            event.sender.send('cpuLoad', data);
+            await new Promise((resolve) => setTimeout(resolve, 300));
         } catch (error) {
             console.error(error);
         }
