@@ -21,7 +21,6 @@ const createWindow = () => {
         width: 1200,
         height: 700,
         useContentSize: true,
-        icon: __dirname + 'public/favicon.ico'
     });
 
     initializeWindow(mainWindow);
