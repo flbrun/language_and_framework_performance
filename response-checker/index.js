@@ -49,42 +49,22 @@ ipcMain.handle('script-contents', async (event) => {
 ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
     const responses = [];
     try {
-        const {selectedProtocol, serverName, port, endpoint, requestNumber} = loadTestOptions;
+        const {selectedProtocol, serverName, port, endpoint, requestNumber, testKind, parallel} = loadTestOptions;
         const url = `${selectedProtocol}${serverName}:${port}/${endpoint}`;
+        console.log(url);
+        let responses = [];
 
         if(loadTestOptions.cpuLoad && (requestNumber > 0)) {
             cpuLoadActive = true;
             cpuLoad(event);
         }
 
+        if (testKind === "parallel") {
+            responses = await executeParallelRequests(url, requestNumber, parallel);
+        }
 
-        for (let i = 0; i < requestNumber; i++) {
-
-            const startTime = performance.now();
-            const response = await fetch(url);
-            const endTime = performance.now();
-            const duration = (endTime - startTime).toFixed(1);
-            const responseBody = await response.text();
-            const responseStatus = response.status;
-            const responseHeaders = Array.from(response.headers.entries());
-            let header  = [];
-
-
-            for (let [name, value] of responseHeaders) {
-                header.push(
-                    {
-                        name: name,
-                        value: value
-                    })
-            }
-
-            responses.push({
-                responseStatus: responseStatus,
-                responseBody: responseBody,
-                responseHeaders: header,
-                duration: duration
-            })
-
+        if (testKind === "serial") {
+            responses = await executeSerialRequests(url, requestNumber);
         }
 
         event.sender.send('loadTestResults', responses);
@@ -95,7 +75,7 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
         responses.push({
             responseStatus: "Err",
             responseBody: error.toString(),
-            responseHeaders: "",
+            responseHeaders: [{name: "Error", value: error.toString()}],
             duration: ""
         })
         event.sender.send('loadTestResults', responses);
@@ -103,17 +83,76 @@ ipcMain.on('startLoadTest', async (event, loadTestOptions) => {
     }
 });
 
+async function executeRequest(url) {
+    const startTime = performance.now();
+    const response = await fetch(url);
+    const endTime = performance.now();
+    const duration = (endTime - startTime).toFixed(1);
+    const responseBody = await response.text();
+    const responseStatus = response.status;
+    const responseHeaders = Array.from(response.headers.entries());
+    let header = [];
+
+    for (let [name, value] of responseHeaders) {
+        header.push({
+            name: name,
+            value: value,
+        });
+    }
+
+    return {
+        responseStatus: responseStatus,
+        responseBody: responseBody,
+        responseHeaders: header,
+        duration: duration,
+    };
+}
+
+async function executeSerialRequests(url, requestNumber) {
+    const responses = [];
+
+    for (let i = 0; i < requestNumber; i++) {
+        const response = await executeRequest(url);
+        responses.push(response);
+    }
+
+    return responses;
+}
+
+async function executeParallelRequests(url, requestNumber, parallel) {
+    const requestPromises = [];
+    const responses = [];
+
+    for (let i = 0; i < requestNumber; i++) {
+        requestPromises.push(executeRequest(url));
+
+        if (requestPromises.length >= parallel || i === requestNumber - 1) {
+
+            const batchResponses = await Promise.all(requestPromises);
+
+            responses.push(...batchResponses);
+
+            requestPromises.length = 0;
+        }
+    }
+
+    return responses;
+}
+
 async function cpuLoad(event) {
      const cores = (await si.cpu()).cores
     let data = [];
 
     while (cpuLoadActive) {
         try {
-            data[0] = (await si.currentLoad()).currentLoad;
+            let sum = 0;
+            data[0] = 0;
             for(let i = 0; i<cores; i++)
             {
                 data[i+1] = (await si.currentLoad()).cpus[i].load;
+                sum += data[i]
             }
+            data[0] = sum/cores;
             event.sender.send('cpuLoad', data);
             await new Promise((resolve) => setTimeout(resolve, 300));
         } catch (error) {

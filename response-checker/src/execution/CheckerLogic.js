@@ -35,7 +35,11 @@ export default function CheckerLogic({
                 endpoint: endpoint,
                 requestNumber: requestNumber,
                 cpuLoad: true,
+                testKind: testKind,
+                parallel: parallel
+
             };
+            console.log(loadTestOptions);
 
             ipcRenderer.send('startLoadTest', loadTestOptions);
 

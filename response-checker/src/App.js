@@ -72,8 +72,6 @@ function App() {
                     configButton={configButton}
                     testKind={testKind}
                     method={method}/>
-
-
             </main>
         </div>
     );

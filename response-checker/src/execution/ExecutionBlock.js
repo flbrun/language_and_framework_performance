@@ -37,6 +37,8 @@ export default function ExecutionBlock({
         if(configButton === "Run Checker")
         {
             return <CheckerLogic
+                testKind={testKind}
+                parallel={parallel}
                 runChecker={runChecker}
                 setRunChecker={setRunChecker}
                 isLoading={isLoading}

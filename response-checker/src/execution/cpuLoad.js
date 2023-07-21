@@ -62,7 +62,6 @@ export const CpuLoad = ({ cpuLoads, isloading }) => {
         const updateChart = () => {
             let randomColors = [];
             let randomColorsBackground = [];
-            console.log(randomColors);
             cpuLoads.forEach((cpuLoad, index) => {
                 randomColors[index] = randomColor({luminosity: 'light', format: 'rgba', alpha: 1 });
                 randomColorsBackground[index] = randomColors[index].replace(/[\d.]+\)$/g, 0.3 + ')');
@@ -78,7 +77,6 @@ export const CpuLoad = ({ cpuLoads, isloading }) => {
                 }
             });
 
-            // Add new datasets outside the forEach loop
             if (chartRef.current.data.datasets.length < cpuLoads.length) {
                 for (let i = chartRef.current.data.datasets.length; i < cpuLoads.length; i++) {
 

@@ -112,6 +112,7 @@
   margin-top: 60px;
   margin-left: 10px;
   margin-bottom: 20px;
+
 }
 
 .Code_block
@@ -125,15 +126,18 @@
 .datafields
 {
   display: flex;
+  flex-wrap: wrap;
 }
 .dataElement
 {
+  margin-top: 20px;
   margin-left: 20px;
   border: 1px solid #d3d3d3;
   border-radius: 5px;
 }
 .dataTable
 {
+  margin-top: 20px;
   margin-left: 20px;
 }
 
